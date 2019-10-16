@@ -1,11 +1,11 @@
 package contracthandler_test
 
 import (
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/util"
+	"github.com/denny60004/quorum-maker-nodemanager/util"
 	"reflect"
 	"testing"
 	"time"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/contracthandler"
+	"github.com/denny60004/quorum-maker-nodemanager/contracthandler"
 )
 
 func TestGetData(t *testing.T) {

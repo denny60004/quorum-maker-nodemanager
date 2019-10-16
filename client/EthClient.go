@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/contracthandler"
+	"github.com/denny60004/quorum-maker-nodemanager/contracthandler"
 	"github.com/ybbus/jsonrpc"
 )
 
@@ -212,6 +212,22 @@ func (ec *EthClient) BlockNumber() string {
 		fmt.Println(err)
 	}
 	return blockNumber
+}
+
+func (ec *EthClient) PendingNonceAt(address string) string {
+	rpcClient := jsonrpc.NewClient(ec.Url)
+	response, err := rpcClient.Call("eth_getTransactionCount", address, "pending")
+	if err != nil {
+		fmt.Println(err)
+	}
+	var nonce string
+	if err == nil {
+		err = response.GetObject(&nonce)
+	}
+	if err != nil {
+		fmt.Println(err)
+	}
+	return nonce
 }
 
 func (ec *EthClient) Coinbase() string {

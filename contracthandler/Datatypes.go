@@ -3,7 +3,7 @@ package contracthandler
 import (
 	"bytes"
 	"encoding/hex"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/util"
+	"github.com/denny60004/quorum-maker-nodemanager/util"
 	"regexp"
 	"strings"
 )

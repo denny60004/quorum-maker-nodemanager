@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"fmt"
 	"strings"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/contractclient"
+	"github.com/denny60004/quorum-maker-nodemanager/contractclient"
 )
 
 type test_data struct {

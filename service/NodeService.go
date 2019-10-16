@@ -13,12 +13,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/denny60004/quorum-maker-nodemanager/client"
+	"github.com/denny60004/quorum-maker-nodemanager/contractclient"
+	"github.com/denny60004/quorum-maker-nodemanager/contracthandler"
+	"github.com/denny60004/quorum-maker-nodemanager/util"
 	"github.com/magiconair/properties"
 	log "github.com/sirupsen/logrus"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/client"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/contractclient"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/contracthandler"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/util"
 	"gopkg.in/gomail.v2"
 )
 
@@ -216,6 +216,10 @@ type LatencyResponse struct {
 	Latency string `json:"latency"`
 }
 
+type NonceResponse struct {
+	Nonce string `json:"nonce"`
+}
+
 type NodeServiceImpl struct {
 	Url string
 }
@@ -403,6 +407,16 @@ func (nsi *NodeServiceImpl) getCurrentNode(url string) NodeInfo {
 	conn := ConnectionInfo{ipAddr, rpcPortInt, enode}
 	responseObj := NodeInfo{nodeName, count, totalCount, activeStatus, conn, raftRole, raftIdInt, blockNumberInt, pendingTxCount, genesis, thisAdminInfo}
 	return responseObj
+}
+
+func (nsi *NodeServiceImpl) getPendingNonceAt(address string, url string) NonceResponse {
+	var nodeUrl = url
+	ethClient := client.EthClient{nodeUrl}
+	n := util.HexStringtoInt64(ethClient.PendingNonceAt(address))
+	var response = NonceResponse{
+		Nonce: strconv.FormatInt(n, 10),
+	}
+	return response
 }
 
 func (nsi *NodeServiceImpl) getOtherPeer(peerId string, url string) client.AdminPeers {

@@ -1,20 +1,21 @@
 package service
 
 import (
-	"net/http"
+	"bytes"
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"fmt"
-	"strconv"
-	"strings"
 	"io"
 	"io/ioutil"
-	"bytes"
-	"time"
-	"github.com/magiconair/properties"
-	"github.com/synechron-finlabs/quorum-maker-nodemanager/util"
-	log "github.com/sirupsen/logrus"
+	"net/http"
 	"os"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/magiconair/properties"
+	log "github.com/sirupsen/logrus"
+	"github.com/denny60004/quorum-maker-nodemanager/util"
 )
 
 type contractJSON struct {
@@ -77,7 +78,7 @@ func (nsi *NodeServiceImpl) UpdateWhitelistHandler(w http.ResponseWriter, r *htt
 	for _, ip := range ipList {
 		allowedIPs[ip] = true
 	}
-	whiteList = append(whiteList, ipList ...)
+	whiteList = append(whiteList, ipList...)
 	response := nsi.updateWhitelist(ipList)
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -251,7 +252,7 @@ func (nsi *NodeServiceImpl) JoinRequestResponseHandler(w http.ResponseWriter, r 
 	status := request.Status
 	response := nsi.joinRequestResponse(enode, status)
 	channelMap[enode] <- status
-	delete(channelMap, enode);
+	delete(channelMap, enode)
 	w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, GET, POST")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -260,6 +261,13 @@ func (nsi *NodeServiceImpl) JoinRequestResponseHandler(w http.ResponseWriter, r 
 
 func (nsi *NodeServiceImpl) GetCurrentNodeHandler(w http.ResponseWriter, r *http.Request) {
 	response := nsi.getCurrentNode(nsi.Url)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	json.NewEncoder(w).Encode(response)
+}
+
+func (nsi *NodeServiceImpl) GetPendingNonceAtHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	response := nsi.getPendingNonceAt(params["address"], nsi.Url)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(response)
 }
