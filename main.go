@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"time"
@@ -27,7 +29,22 @@ func init() {
 func main() {
 
 	if len(os.Args) > 1 {
-		nodeUrl = os.Args[1]
+		u, err := url.Parse(os.Args[1])
+		if err != nil {
+			fmt.Printf("error: %v, failed to parse %v\n", err, os.Args[1])
+			os.Exit(0)
+		}
+		host, port, err := net.SplitHostPort(u.Host)
+		if err != nil {
+			fmt.Printf("error: %v, failed to split host and port %v\n", err, u.Host)
+			os.Exit(0)
+		}
+		ips, err := net.LookupHost(host)
+		if err != nil {
+			fmt.Printf("error: %v, failed to resolve %v ip\n", err, host)
+			os.Exit(0)
+		}
+		nodeUrl = "http://" + ips[0] + ":" + port
 	}
 
 	if len(os.Args) > 2 {
