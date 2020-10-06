@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/denny60004/quorum-maker-nodemanager/util"
 	"github.com/gorilla/mux"
 	"github.com/magiconair/properties"
 	log "github.com/sirupsen/logrus"
-	"github.com/denny60004/quorum-maker-nodemanager/util"
 )
 
 type contractJSON struct {
@@ -53,6 +53,10 @@ var allowedIPs = map[string]bool{}
 var nameMap = map[string]string{}
 var peerMap = map[string]string{}
 var channelMap = make(map[string](chan string))
+
+func (nsi *NodeServiceImpl) GetHealthzHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
 
 func (nsi *NodeServiceImpl) IPWhitelister() {
 	go func() {

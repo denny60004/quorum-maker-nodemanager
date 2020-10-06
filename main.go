@@ -74,6 +74,7 @@ func main() {
 	}()
 
 	networkMapService := contractclient.NetworkMapContractClient{EthClient: client.EthClient{nodeUrl}}
+	router.HandleFunc("/healthz", nodeService.GetHealthzHandler).Methods("GET")
 	router.HandleFunc("/txn/{txn_hash}", nodeService.GetTransactionInfoHandler).Methods("GET")
 	router.HandleFunc("/txn", nodeService.GetLatestTransactionInfoHandler).Methods("GET")
 	router.HandleFunc("/pendingNonceAt/{address}", nodeService.GetPendingNonceAtHandler).Methods("GET")
