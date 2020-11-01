@@ -9,11 +9,13 @@ RUN git clone https://github.com/denny60004/quorum-maker-nodemanager.git && cd q
 FROM ethereum/solc:0.4.24 as build_solc
 
 # Final stage
-FROM debian:stable-20200908-slim
+FROM ubuntu:20.04
+RUN apt-get update && apt full-upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /root/quorum-maker/NodeManagerUI 
-COPY --from=build_nodeManager /root/quorum-maker/NodeManager /root/quorum-maker
+COPY --from=build_nodeManager /root/quorum-maker/NodeManager /tmp
 COPY --from=build_solc /usr/bin/solc /usr/local/bin
-ADD dist /root/quorum-maker/NodeManagerUI
+ADD dist /tmp/NodeManagerUI
 
 
 ADD NetworkManagerContract.sol /root/quorum-maker/NetworkManagerContract.sol
