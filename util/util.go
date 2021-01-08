@@ -1,19 +1,20 @@
 package util
 
 import (
+	"bufio"
 	"encoding/hex"
 	"fmt"
-	"github.com/magiconair/properties"
+	"io"
+	"io/ioutil"
+	"math/big"
 	"os"
+	"os/exec"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
-	"os/exec"
-	"math/big"
-	"bufio"
-	"io"
-	"io/ioutil"
+
+	"github.com/magiconair/properties"
 )
 
 func TakeSliceArg(arg interface{}) (out []interface{}, ok bool) {
@@ -142,7 +143,7 @@ func AppendStringToFile(path, text string) error {
 }
 
 func PropertyExists(property string, filepath string) string {
-	command := fmt.Sprint("grep -R ", "\"", property, "\" ", "\"", filepath, "\"")
+	command := fmt.Sprint("grep -r ", "\"", property, "\" ", "\"", filepath, "\"")
 	out, _ := exec.Command("bash", "-c", command).Output()
 	return string(out)
 }

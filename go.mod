@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/ethereum/go-ethereum v1.9.6
+	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/magiconair/properties v1.8.1
 	github.com/sirupsen/logrus v1.4.2
